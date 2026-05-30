@@ -75,15 +75,16 @@ class Utils:
         num_videos = download_info.get('num_videos', None)
         media_group_id = download_info['message'].media_group_id if download_info['message'].media_group_id else None
 
+        speed_mb_s = download_speed / 1024  # download_speed is KB/s
         summary = (
-            f"**Download completed**\n\n"
-            f"**File Name:** {file_name}\n"
-            f"**Download Folder:** {download_folder}\n"
-            f"**File Size:** {size_str}\n"
-            f"**Start Time:** {start_hour}\n"
-            f"**End Time:** {end_hour}\n"
-            f"**Download Time:** {elapsed_time:.2f} seconds\n"
-            f"**Download Speed:** {download_speed:.2f} KB/s"
+            f"✅ **Download completed**\n\n"
+            f"📦 **File Name:** `{file_name}`\n"
+            f"📁 **Download Folder:** `{download_folder}`\n"
+            f"📏 **File Size:** `{size_str}`\n"
+            f"🕒 **Start Time:** `{start_hour}`\n"
+            f"🕓 **End Time:** `{end_hour}`\n"
+            f"⏱ **Download Time:** `{elapsed_time:.2f} seconds`\n"
+            f"⚡ **Average Speed:** `{speed_mb_s:.2f} MB/s` ({download_speed:.2f} KB/s)"
         )
 
         if origin_group:

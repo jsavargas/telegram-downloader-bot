@@ -81,6 +81,18 @@ Enjoy an automated and organized downloading experience with telethon_downloader
  **MAX_CONCURRENT_TASKS** [OPTIONAL] **:** <maximum number of parallel downloads allowed (default: 3, maximum 4)> 
 >NOTE: Allows you to define the maximum number of simultaneous downloads
 
+ **ENABLE_USERBOT** [OPTIONAL]: <enable a Telegram UserBot client (`true`/`false`)>
+>NOTE: UserBot can monitor channels directly and helps with higher-throughput downloads.
+
+ **USER_SESSION_STRING** [OPTIONAL]: <Pyrogram user session string used by UserBot>
+
+ **MONITORED_CHAT_IDS** [OPTIONAL]: <comma-separated chat/channel IDs to monitor for new media>
+>Example: `-1001234567890,-1009876543210`
+
+ **PROGRESS_PERCENT_STEP** [OPTIONAL]: <minimum percent delta before progress message update (default: 5)>
+
+ **PROGRESS_EDIT_INTERVAL_SEC** [OPTIONAL]: <minimum seconds between progress edits (default: 6)>
+
 
 
 ## Volumes:
@@ -120,6 +132,11 @@ services:
       - AUTHORIZED_USER_ID=${AUTHORIZED_USER_ID}
       - TZ=America/Santiago
       - MAX_CONCURRENT_TASKS=${MAX_CONCURRENT_TASKS} or TG_MAX_PARALLEL=${TG_MAX_PARALLEL}
+      - ENABLE_USERBOT=${ENABLE_USERBOT}
+      - USER_SESSION_STRING=${USER_SESSION_STRING}
+      - MONITORED_CHAT_IDS=${MONITORED_CHAT_IDS}
+      - PROGRESS_PERCENT_STEP=${PROGRESS_PERCENT_STEP}
+      - PROGRESS_EDIT_INTERVAL_SEC=${PROGRESS_EDIT_INTERVAL_SEC}
       - PUID=${PUID}
       - PGID=${PGID}
     volumes:
@@ -128,6 +145,27 @@ services:
       - /path/torrent/watch:/watch
 
 ```
+
+## Raspberry Pi 5 quick run guide
+
+1. Install Docker and Docker Compose plugin:
+   - `sudo apt update`
+   - `sudo apt install -y docker.io docker-compose-plugin`
+   - `sudo usermod -aG docker $USER` (then relogin)
+2. Create host folders:
+   - `mkdir -p ~/tgdl/{config,download,watch}`
+3. Create `.env` next to `docker-compose.yml` with at least:
+   - `API_ID`, `API_HASH`, `BOT_TOKEN`, `AUTHORIZED_USER_ID`
+   - Optional UserBot/channel monitoring:
+     - `ENABLE_USERBOT=true`
+     - `USER_SESSION_STRING=<your_pyrogram_session_string>`
+     - `MONITORED_CHAT_IDS=-100xxxxxxxxxx`
+   - Session string note: generate it with Pyrogram session-string tooling using your own Telegram account credentials (see: https://docs.pyrogram.org/topics/storage-engines#session-strings).
+4. Start:
+   - `docker compose up -d`
+5. Check logs:
+   - `docker compose logs -f telegram-downloader`
+
 
 
 # Changelog
